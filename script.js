@@ -166,25 +166,6 @@
         // Initialize timeline animation
         window.dispatchEvent(new Event('scroll'));
 
-        // #region agent log
-        (function debugHomeContactSpacing() {
-            function logHomeSpacing() {
-                const contactInfo = document.querySelector('.home .contact-info');
-                const h1 = document.querySelector('.home .home-content h1');
-                const h1Span = document.querySelector('.home .home-content h1 span');
-                if (!contactInfo) return;
-                const ps = contactInfo.querySelectorAll('p');
-                const cs = window.getComputedStyle(contactInfo);
-                const rows = Array.from(ps).map(function(p, i) {
-                    const pcs = window.getComputedStyle(p);
-                    return { index: i, marginBottom: pcs.marginBottom, marginTop: pcs.marginTop, lineHeight: pcs.lineHeight };
-                });
-                fetch('http://127.0.0.1:7614/ingest/9765cf00-1d89-4f7e-a89a-cb6587165f7d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'8e4570'},body:JSON.stringify({sessionId:'8e4570',runId:'post-fix',location:'script.js:debugHomeContactSpacing',message:'home contact spacing computed',data:{viewportWidth:window.innerWidth,contactLineHeight:cs.lineHeight,contactMarginBottom:cs.marginBottom,paragraphs:rows,h1FontSize:h1?window.getComputedStyle(h1).fontSize:null,nameFontSize:h1Span?window.getComputedStyle(h1Span).fontSize:null},timestamp:Date.now(),hypothesisId:'A-B-C'})}).catch(function(){});
-            }
-            window.addEventListener('load', logHomeSpacing);
-            window.addEventListener('resize', logHomeSpacing);
-        })();
-        // #endregion
 
         // LeetCard — auto-refresh image from leetcard.jacoblin.cool
         (function initLeetCard() {
