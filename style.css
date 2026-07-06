@@ -307,8 +307,10 @@
 
         .contact-info i {
             color: #3498db;
-            margin-right: 1rem;
-            width: 20px;
+            margin-right: 1.2rem;
+            width: 24px;
+            font-size: 2.2rem;
+            vertical-align: middle;
         }
 
         .contact-info a {
@@ -504,6 +506,40 @@
             background: linear-gradient(45deg, #2ecc71, #3498db);
         }
 
+        .views-counter-btn {
+            position: absolute;
+            top: 14rem;
+            right: 9%;
+            z-index: 10;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2.2rem;
+            background: rgba(10, 10, 10, 0.6);
+            border: 2px solid rgba(46, 204, 113, 0.3);
+            border-radius: 50px;
+            font-size: 1.5rem;
+            color: #2ecc71;
+            font-weight: 600;
+            gap: 0.8rem;
+            font-family: 'Montserrat', sans-serif;
+            box-shadow: 0 10px 30px rgba(46, 204, 113, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            cursor: default;
+        }
+
+        .views-counter-btn i {
+            font-size: 1.7rem;
+        }
+
+        .views-counter-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(46, 204, 113, 0.3);
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.1);
+        }
+
         .home-btns,
         .contact-btns {
             display: flex;
@@ -589,6 +625,60 @@
                 content: "Web Developer";
             }
         } 
+
+        .interests {
+            font-size: 2.2rem;
+            color: #2ecc71;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            height: 3.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .interests span {
+            position: relative;
+        }
+
+        .interests span::before {
+            content: "Modern Software Development";
+            color: #2ecc71;
+            animation: interestWords 12s infinite;
+            text-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
+        }
+
+        .interests span::after {
+            content: "";
+            display: inline-block;
+            width: 3px;
+            height: 2rem;
+            background-color: #2ecc71;
+            margin-left: 8px;
+            vertical-align: middle;
+            animation: interestCursor 0.8s infinite;
+        }
+
+        @keyframes interestCursor {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes interestWords {
+            0%, 30% {
+                content: "Modern Software Development";
+            }
+            33%, 63% {
+                content: "Full Stack Developer";
+            }
+            66%, 96% {
+                content: "AI Enthusiast";
+            }
+        }
 
         /* Experience Section - REPLACED ABOUT */
         .experience {
@@ -1738,8 +1828,9 @@
             .home {
                 flex-direction: column;
                 text-align: center;
-                gap: 6rem;
-                padding-top: 15rem;
+                gap: 3rem;
+                padding-top: 10rem;
+                padding-bottom: 3rem;
             }
 
             .home-content {
@@ -1751,8 +1842,8 @@
             }
 
             .home-img img {
-                width: 70vw;
-                max-width: 400px;
+                width: 65vw;
+                max-width: 320px;
             }
 
             .home .home-content h3 {
@@ -1767,9 +1858,18 @@
                 font-size: 0.92em;
             }
 
+            .home-content > p {
+                margin-bottom: 2rem;
+                font-size: 1.6rem;
+            }
+
             .typing-text {
                 font-size: 3rem;
                 height: 5rem;
+                justify-content: center;
+            }
+
+            .interests {
                 justify-content: center;
             }
             
@@ -1810,6 +1910,20 @@
                 font-size: 1.7rem;
                 letter-spacing: 0.15rem;
             }
+
+            .views-counter-btn {
+                position: absolute;
+                top: 12rem;
+                left: 5%;
+                right: auto;
+                z-index: 10;
+                padding: 0.8rem 1.8rem;
+                font-size: 1.3rem;
+            }
+
+            .views-counter-btn i {
+                font-size: 1.5rem;
+            }
             
             .contact-social-icons {
                 flex-wrap: wrap;
@@ -1818,15 +1932,59 @@
 
         @media(max-width: 768px) {
             section {
-                padding: 12rem 5% 5rem;
+                padding: 10rem 5% 4rem;
+            }
+
+            .home {
+                padding-top: 9rem;
+                padding-bottom: 2rem;
+                gap: 2rem;
             }
 
             .home .home-content h1 {
-                font-size: 3.6rem;
+                font-size: 3.4rem;
             }
 
             .home .home-content h1 span {
                 font-size: 0.9em;
+            }
+
+            .home .contact-info {
+                display: block;
+                margin-bottom: 1.5rem;
+            }
+
+            .home .contact-info p {
+                margin-bottom: 0.6rem;
+                font-size: 1.6rem;
+            }
+
+            .home .contact-info i {
+                font-size: 2rem;
+                width: 22px;
+                margin-right: 1rem;
+            }
+
+            .home .home-content p {
+                margin-bottom: 1.5rem;
+                font-size: 1.5rem;
+            }
+
+            .home .social-icons {
+                margin-bottom: 2rem;
+                gap: 1rem;
+            }
+
+            .home .social-icons a {
+                max-width: 7.6rem;
+                height: 7.6rem;
+                font-size: 2.8rem;
+                border-radius: 12px;
+            }
+
+            .home .social-icons .platform-name {
+                font-size: 1.1rem;
+                margin-top: 0.4rem;
             }
 
             .heading {
@@ -1902,7 +2060,8 @@
             }
 
             .home-img img {
-                width: 80vw;
+                width: 60vw;
+                max-width: 240px;
             }
             
             .experience-item {
@@ -1922,29 +2081,70 @@
             }
 
             .home-img img {
-                width: 90vw;
+                width: 50vw;
+                max-width: 200px;
+            }
+
+            .home {
+                padding-top: 8rem;
+                padding-bottom: 1.5rem;
+                gap: 1.5rem;
+            }
+
+            .home .contact-info {
+                margin-bottom: 1rem;
+            }
+
+            .home .contact-info p {
+                margin-bottom: 0.4rem;
+                font-size: 1.5rem;
+            }
+
+            .home .contact-info i {
+                font-size: 1.8rem;
+                width: 20px;
+                margin-right: 0.8rem;
+            }
+
+            .home .home-content p {
+                margin-bottom: 1rem;
+                font-size: 1.4rem;
             }
 
             .home .social-icons {
-                gap: 0.9rem;
+                gap: 0.8rem;
+                margin-bottom: 1.5rem;
             }
 
             .home .social-icons a {
-                max-width: 7.6rem;
-                height: 7.6rem;
-                font-size: 2.9rem;
-                border-radius: 12px;
+                max-width: 6.8rem;
+                height: 6.8rem;
+                font-size: 2.5rem;
+                border-radius: 10px;
             }
 
             .home .social-icons .platform-name {
-                font-size: 1.15rem;
-                margin-top: 0.35rem;
+                font-size: 1rem;
+                margin-top: 0.3rem;
             }
 
             .home-btns .btn {
-                padding: 1.2rem 2.6rem;
-                font-size: 1.5rem;
+                padding: 1.1rem 2.4rem;
+                font-size: 1.4rem;
                 letter-spacing: 0.1rem;
+            }
+
+            .views-counter-btn {
+                position: absolute;
+                top: 11rem;
+                left: 5%;
+                right: auto;
+                padding: 0.6rem 1.4rem;
+                font-size: 1.2rem;
+            }
+
+            .views-counter-btn i {
+                font-size: 1.4rem;
             }
             
             .heading {
