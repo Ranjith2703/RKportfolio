@@ -131,17 +131,7 @@ Steps:
 
 ---
 
-## 📬 Connect With Me
-
-- 🌐 Portfolio: https://ranjithak.vercel.app/
-- 💼 LinkedIn: https://linkedin.com/in/ranjithkumar-a-456616280
-- 💻 GitHub: https://github.com/Ranjith2703
-- 📧 Email: ranjithkumara.tech@gmail.com
-
----
-
 ## 📄 License
 
 © 2026 Ranjith Kumar A.
-
-Built with ❤️ using HTML, CSS, JavaScript, and modern web technologies.
+Developed by Ranjith Kumar A using HTML, CSS, JavaScript, and modern web technologies.
