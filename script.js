@@ -374,3 +374,22 @@
         // Start typing effect after page loads
         setTimeout(typeEffect, 1000);
         }
+
+        // Dynamic Views Counter
+        (async function initViewsCounter() {
+            const counterElement = document.getElementById('views-count');
+            if (!counterElement) return;
+            try {
+                // Hits CounterAPI to count and get page views
+                const response = await fetch('https://api.counterapi.dev/v1/Ranjith2703/portfolio/up');
+                if (response.ok) {
+                    const data = await response.json();
+                    counterElement.textContent = Number(data.value).toLocaleString();
+                } else {
+                    counterElement.textContent = '1,850+';
+                }
+            } catch (error) {
+                console.error('Error fetching counter:', error);
+                counterElement.textContent = '1,850+';
+            }
+        })();
