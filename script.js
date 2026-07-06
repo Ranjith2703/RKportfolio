@@ -384,7 +384,7 @@
                 const response = await fetch('https://api.counterapi.dev/v1/Ranjith2703/portfolio/up');
                 if (response.ok) {
                     const data = await response.json();
-                    counterElement.textContent = Number(data.value).toLocaleString();
+                    counterElement.textContent = Number(data.count).toLocaleString();
                 } else {
                     counterElement.textContent = '1,850+';
                 }
