@@ -51,6 +51,12 @@
             100% { background-position: 0% 50%; }
         }
 
+        @keyframes arrowPulse {
+            0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
+        }
+
         .floating-shapes {
             position: absolute;
             width: 100%;
@@ -126,7 +132,7 @@
         }
 
         header {
-            margin-top: 20px;
+            margin-top: 0;
             position: fixed;
             top: 0;
             left: 0;
@@ -463,6 +469,24 @@
 
         .social-icons a:hover i {
             color: white !important;
+        }
+
+        .social-icons a svg {
+            width: 1em;
+            height: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover svg {
+            fill: white !important;
+        }
+
+        .leetcode-icon svg {
+            fill: #FFA116;
+        }
+
+        .gfg-icon svg {
+            fill: #2F8D46;
         }
 
         .btn {
@@ -846,13 +870,13 @@
             box-sizing: border-box;
             margin-bottom: 5rem;
             opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease;
+            transform: translateY(60px) scale(0.92);
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.15), opacity 0.8s ease;
         }
 
         .timeline-item.visible {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
         }
 
         .timeline-item:nth-child(odd) {
@@ -938,6 +962,23 @@
             border-radius: 50%;
             top: 15px;
             z-index: 1;
+            transition: transform 0.4s ease;
+        }
+
+        .timeline-item.visible::after {
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes pulseDot {
+            0% {
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+            }
         }
 
         .timeline-item:nth-child(odd)::after {
@@ -1059,10 +1100,37 @@
             background-color: rgba(10, 10, 10, 0.8);
         }
 
-        .projects-container {
+        .projects-carousel {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .projects-carousel-viewport {
+            overflow: visible;
+            width: 100%;
+        }
+
+        .projects-carousel-track {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 4rem;
+            width: 100%;
+        }
+
+        .project-slide {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .projects-nav {
+            display: none !important;
+        }
+
+        .projects-controls {
+            display: none !important;
         }
 
         .project-card {
@@ -1077,6 +1145,7 @@
             position: relative;
             overflow: hidden;
             height: 100%;
+            width: 100%;
         }
 
         .project-card:hover {
@@ -1788,6 +1857,8 @@
         @media(max-width: 995px) {
             .menu-toggle {
                 display: block;
+                position: relative;
+                z-index: 1001;
             }
 
             nav {
@@ -1995,14 +2066,160 @@
                 font-size: 5rem;
             }
 
-            .skills-container,
-            .projects-container {
+            .skills-container {
                 grid-template-columns: 1fr;
+            }
+
+            .projects-carousel-track {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                width: auto;
+                gap: 0;
+                transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                will-change: transform;
+            }
+
+            .projects-carousel-track.no-transition {
+                transition: none;
+            }
+
+            .project-slide {
+                flex: 0 0 100%;
+                width: 100%;
+                padding: 0;
+            }
+
+            .projects-carousel {
+                padding: 0 3.5rem;
+            }
+
+            .projects-carousel-viewport {
+                overflow: hidden;
+                padding: 2.5rem 0;
+            }
+
+            .project-slide .project-card {
+                transform: scale(0.92);
+                opacity: 0.5;
+                transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease;
+            }
+
+            .project-slide.active .project-card {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            .projects-nav {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 4rem;
+                height: 4rem;
+                border-radius: 50%;
+                border: 1px solid rgba(52, 152, 219, 0.3);
+                background: rgba(10, 10, 10, 0.3);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 1.6rem;
+                cursor: pointer;
+                z-index: 10;
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                animation: arrowPulse 2s infinite;
+            }
+
+            .projects-nav:hover {
+                background: rgba(52, 152, 219, 0.2);
+                border-color: #3498db;
+                color: #fff;
+                box-shadow: 0 0 15px rgba(52, 152, 219, 0.4);
+            }
+
+            .projects-prev { left: 0.8rem; }
+            .projects-next { right: 0.8rem; }
+
+            .projects-prev i, .projects-next i {
+                transition: transform 0.3s ease;
+            }
+
+            .projects-prev:hover i {
+                transform: translateX(-3px);
+            }
+
+            .projects-next:hover i {
+                transform: translateX(3px);
+            }
+
+            .projects-controls {
+                display: block !important;
+            }
+
+            .projects-dots {
+                display: flex;
+                justify-content: center;
+                gap: 0.8rem;
+                margin-top: 2.5rem;
+                flex-wrap: wrap;
+            }
+
+            .projects-dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                border: none;
+                background: rgba(255, 255, 255, 0.25);
+                cursor: pointer;
+                padding: 0;
+                transition: all 0.3s ease;
+            }
+
+            .projects-dot.active {
+                background: #3498db;
+                transform: scale(1.25);
+                box-shadow: 0 0 10px rgba(52, 152, 219, 0.6);
+            }
+
+            .projects-counter {
+                text-align: center;
+                font-size: 1.4rem;
+                color: #7f8c8d;
+                margin-top: 1.2rem;
+                font-family: 'Montserrat', sans-serif;
             }
 
             .cert-carousel {
                 padding: 0 4rem;
                 max-width: 100%;
+            }
+
+            .cert-card {
+                min-height: 420px;
+                padding: 2.2rem;
+            }
+
+            .cert-img {
+                height: 200px;
+                margin-bottom: 1.5rem;
+            }
+
+            .cert-card h3 {
+                font-size: 2.0rem;
+                margin-bottom: 1.0rem;
+            }
+
+            .cert-card p {
+                font-size: 1.5rem;
+                margin-bottom: 1.8rem;
+                flex-grow: 1;
+            }
+
+            .cert-link {
+                padding: 1.0rem 2.2rem;
+                font-size: 1.5rem;
             }
 
             .leetcode-layout {
