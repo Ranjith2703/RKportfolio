@@ -393,3 +393,223 @@
                 counterElement.textContent = '1,850+';
             }
         })();
+
+        // Projects carousel — active only on mobile, structured identical to Certifications carousel
+        (function initProjectsCarousel() {
+            const track = document.getElementById('projects-track');
+            const viewport = document.getElementById('projects-viewport');
+            const dotsContainer = document.getElementById('projects-dots');
+            const projectsCounter = document.getElementById('projects-counter');
+            const prevBtn = document.getElementById('projects-prev');
+            const nextBtn = document.getElementById('projects-next');
+            if (!track || !viewport) return;
+
+            const slides = track.querySelectorAll('.project-slide');
+            const TABLET_BP = 768;
+            const INTERVAL = 3000;
+            let currentSlideIndex = 0;
+            let autoTimer;
+            let startX = 0;
+            let currentX = 0;
+            let isDragging = false;
+            let dots = [];
+
+            function isMobile() {
+                return window.innerWidth <= TABLET_BP;
+            }
+
+            function maxSlideIndex() {
+                return Math.max(0, slides.length - 1);
+            }
+
+            function getSlideWidth() {
+                return viewport.offsetWidth;
+            }
+
+            function buildDots() {
+                if (!dotsContainer) return;
+                dotsContainer.innerHTML = '';
+                if (!isMobile()) return;
+                
+                const pages = slides.length;
+                for (let i = 0; i < pages; i++) {
+                    const dot = document.createElement('button');
+                    dot.type = 'button';
+                    dot.className = 'projects-dot' + (i === currentSlideIndex ? ' active' : '');
+                    dot.setAttribute('aria-label', 'Go to project ' + (i + 1));
+                    dot.addEventListener('click', function() { goTo(i); });
+                    dotsContainer.appendChild(dot);
+                }
+                dots = dotsContainer.querySelectorAll('.projects-dot');
+            }
+
+            function updateCounter() {
+                if (!projectsCounter) return;
+                if (!isMobile()) {
+                    projectsCounter.textContent = '';
+                    return;
+                }
+                projectsCounter.textContent = (currentSlideIndex + 1) + ' / ' + slides.length;
+            }
+
+            function updatePosition(animate) {
+                if (!isMobile()) {
+                    slides.forEach(function(s) {
+                        s.style.flex = '';
+                        s.style.width = '';
+                        s.classList.remove('active');
+                    });
+                    track.style.transform = '';
+                    if (dotsContainer) dotsContainer.innerHTML = '';
+                    if (projectsCounter) projectsCounter.textContent = '';
+                    return;
+                }
+
+                const slideW = getSlideWidth();
+                const offset = currentSlideIndex * slideW;
+
+                slides.forEach(function(s, idx) {
+                    s.style.flex = '0 0 ' + slideW + 'px';
+                    s.style.width = slideW + 'px';
+                    if (idx === currentSlideIndex) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+
+                if (!animate) track.classList.add('no-transition');
+                track.style.transform = 'translateX(-' + offset + 'px)';
+                if (!animate) {
+                    void track.offsetWidth;
+                    track.classList.remove('no-transition');
+                }
+
+                dots.forEach(function(d, i) { d.classList.toggle('active', i === currentSlideIndex); });
+                updateCounter();
+            }
+
+            function goTo(index) {
+                if (!isMobile()) {
+                    currentSlideIndex = 0;
+                    updatePosition(false);
+                    clearInterval(autoTimer);
+                    return;
+                }
+                const maxIdx = maxSlideIndex();
+                if (index > maxIdx) {
+                    currentSlideIndex = 0; // Wrap around to the start
+                } else if (index < 0) {
+                    currentSlideIndex = maxIdx; // Wrap to the end
+                } else {
+                    currentSlideIndex = index;
+                }
+                updatePosition(true);
+                resetAuto();
+            }
+
+            function next() { goTo(currentSlideIndex + 1); }
+            function prev() { goTo(currentSlideIndex - 1); }
+
+            function resetAuto() {
+                clearInterval(autoTimer);
+                if (isMobile()) {
+                    autoTimer = setInterval(next, INTERVAL);
+                }
+            }
+
+            function onResize() {
+                if (isMobile()) {
+                    if (currentSlideIndex > maxSlideIndex()) currentSlideIndex = maxSlideIndex();
+                    buildDots();
+                    updatePosition(false);
+                    resetAuto();
+                } else {
+                    slides.forEach(function(s) {
+                        s.style.flex = '';
+                        s.style.width = '';
+                        s.classList.remove('active');
+                    });
+                    track.style.transform = '';
+                    if (dotsContainer) dotsContainer.innerHTML = '';
+                    if (projectsCounter) projectsCounter.textContent = '';
+                    clearInterval(autoTimer);
+                }
+            }
+
+            prevBtn.addEventListener('click', prev);
+            nextBtn.addEventListener('click', next);
+
+            function getX(e) {
+                if (e.type.includes('mouse')) return e.pageX;
+                return e.touches[0].clientX;
+            }
+
+            let startY = 0;
+            let isScrolling = false;
+
+            function onStart(e) {
+                if (!isMobile()) return;
+                if (e.type === 'mousedown' && e.button !== 0) return;
+                isDragging = true;
+                isScrolling = false;
+                startX = getX(e);
+                startY = e.type.includes('mouse') ? e.pageY : e.touches[0].clientY;
+                currentX = startX;
+                track.classList.add('no-transition');
+                viewport.classList.add('is-dragging');
+                clearInterval(autoTimer);
+            }
+
+            function onMove(e) {
+                if (!isDragging || !isMobile() || isScrolling) return;
+                currentX = getX(e);
+                const currentY = e.type.includes('mouse') ? e.pageY : e.touches[0].clientY;
+                
+                const diffX = currentX - startX;
+                const diffY = currentY - startY;
+
+                // Detect if user is scrolling vertically
+                if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 10) {
+                    isScrolling = true;
+                    isDragging = false;
+                    viewport.classList.remove('is-dragging');
+                    track.classList.remove('no-transition');
+                    updatePosition(true);
+                    resetAuto();
+                    return;
+                }
+
+                if (e.cancelable) {
+                    e.preventDefault();
+                }
+                const offset = currentSlideIndex * getSlideWidth() - diffX;
+                track.style.transform = 'translateX(-' + offset + 'px)';
+            }
+
+            function onEnd() {
+                if (!isDragging) return;
+                isDragging = false;
+                viewport.classList.remove('is-dragging');
+                track.classList.remove('no-transition');
+                if (!isMobile()) return;
+                const diff = currentX - startX;
+                if (diff < -60) next();
+                else if (diff > 60) prev();
+                else updatePosition(true);
+                resetAuto();
+            }
+
+            viewport.addEventListener('mousedown', onStart);
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onEnd);
+            viewport.addEventListener('touchstart', onStart, { passive: true });
+            viewport.addEventListener('touchmove', onMove, { passive: false });
+            viewport.addEventListener('touchend', onEnd);
+            window.addEventListener('resize', onResize);
+            window.addEventListener('load', onResize);
+
+            buildDots();
+            updatePosition(false);
+            resetAuto();
+        })();
